@@ -1,0 +1,16 @@
+#!/bin/bash
+
+prev_branch=`git reflog | awk 'NR==1{ print $6; exit }'`
+#prev_branch="$(git rev-parse --abbrev-ref HEAD)" # alt-way
+new_branch=`git reflog | awk 'NR==1{ print $8; exit }'`
+echo "prev_branch-post: $prev_branch"
+echo "new_branch-post: $new_branch"
+
+if test -f git-hooks/post-checkout-branch
+then
+    echo "post-checkout-branch"
+    chmod +x git-hooks/post-checkout-branch
+    ./git-hooks/post-checkout-branch
+fi
+
+git clean -f -d
